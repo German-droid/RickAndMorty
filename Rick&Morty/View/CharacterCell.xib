@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="100" id="Aek-tU-uzH" customClass="CharacterCell" customModule="Rick_Morty" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="426" height="100"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Aek-tU-uzH" id="sR7-Fm-v0W">
+                <rect key="frame" x="0.0" y="0.0" width="426" height="100"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="moK-dT-Vs3">
+                        <rect key="frame" x="5" y="6" width="90" height="88.666666666666671"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="90" id="qma-ud-FOh"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nombre extralargo muy largo" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9d1-Dg-gHh">
+                        <rect key="frame" x="99.999999999999986" y="5" width="221.66666666666663" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="SK8-aY-dI1"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="9d1-Dg-gHh" firstAttribute="top" secondItem="sR7-Fm-v0W" secondAttribute="top" constant="5" id="Awi-DZ-umX"/>
+                    <constraint firstItem="9d1-Dg-gHh" firstAttribute="leading" secondItem="moK-dT-Vs3" secondAttribute="trailing" constant="5" id="J1y-HY-eft"/>
+                    <constraint firstItem="moK-dT-Vs3" firstAttribute="top" secondItem="sR7-Fm-v0W" secondAttribute="top" constant="5" id="Z2W-dh-yZH"/>
+                    <constraint firstItem="moK-dT-Vs3" firstAttribute="leading" secondItem="sR7-Fm-v0W" secondAttribute="leading" constant="5" id="a5p-Te-Kq1"/>
+                    <constraint firstAttribute="bottom" secondItem="moK-dT-Vs3" secondAttribute="bottom" constant="5" id="yFy-61-20t"/>
+                </constraints>
+            </tableViewCellContentView>
+            <point key="canvasLocation" x="-47.328244274809158" y="-59.154929577464792"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="person.circle.fill" catalog="system" width="128" height="123"/>
+    </resources>
+</document>
