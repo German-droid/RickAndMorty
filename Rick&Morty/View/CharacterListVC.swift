@@ -19,6 +19,7 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     let reloadButton: UIButton = {
         var btn = UIButton(type: .custom)
         btn.isHidden = true
+        btn.alpha = 0.0
         btn.setTitle("Reintentar", for: .normal)
         btn.setTitleColor(UIColor(red: 0.09, green: 0.09, blue: 0.09, alpha: 1.0), for: .normal)
         btn.backgroundColor = UIColor(red: 0.45, green: 0.73, blue: 0.3, alpha: 1.0)
@@ -62,54 +63,53 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         let buttonY = (view.bounds.height - buttonHeight) / 2
         reloadButton.frame = CGRect(x: buttonX, y: buttonY, width: buttonWidth, height: buttonHeight)
         
+        let backgroundImage = UIImageView(image: UIImage(named: "background"))
+        backgroundImage.contentMode = .scaleAspectFill
+        backgroundImage.frame = view.bounds
+        view.addSubview(backgroundImage)
+        
+        let overlayView = UIView(frame: view.bounds)
+        overlayView.backgroundColor = UIColor.black.withAlphaComponent(0.90)
+        view.addSubview(overlayView)
+        view.sendSubviewToBack(backgroundImage)
+        
         // Agregarlas a la vista principal
+        
         view.addSubview(tableView)
         view.addSubview(imageView)
         view.addSubview(reloadButton)
     }
     
     func loadCharacters() {
-        
-        let semaphore = DispatchSemaphore(value: 0)
-        let group = DispatchGroup()
-        
+
         Service.shared.fetchAllFromApiToCoredata { result in
             switch result {
             case .success(let characters):
                 // Manejar los personajes obtenidos correctamente
                 self.characters = characters
                 DispatchQueue.main.async { [self] in
-                    defer {
-                        semaphore.signal()
-                    }
+                    self.tableView.reloadData()
                     UIView.animate(withDuration: 1, animations: {
                         self.imageView.alpha = 0.0
+                        self.tableView.alpha = 1.0
                     }) { _ in
                         self.imageView.isHidden = true
-                        
-                    }
-                    self.tableView.reloadData()
-                    UIView.animate(withDuration: 1) {
-                        self.tableView.alpha = 1.0
                     }
                 }
                 print("All characters: \(characters.count)")
             case .failure(let error):
                 DispatchQueue.main.async { [self] in
-                    defer {
-                        semaphore.signal()
+                    UIView.animate(withDuration: 1, animations: {
+                        self.imageView.alpha = 0.0
+                        self.reloadButton.alpha = 1.0
+                    }) { _ in
+                        self.imageView.isHidden = true
+                        self.reloadButton.isHidden = false
+                        
                     }
-                    imageView.isHidden = true
-                    reloadButton.isHidden = false
                 }
                 // Manejar el error en la obtención de los personajes
                 print("Error: \(error)")
-            }
-            let timeout = DispatchTime.now() + .seconds(15)
-                
-            if semaphore.wait(timeout: timeout) == .timedOut {
-                self.imageView.isHidden = true
-                self.reloadButton.isHidden = false
             }
         }
         
@@ -121,14 +121,14 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         titleLabel.text = "Rick & Morty"
         titleLabel.textColor = UIColor.white
         titleLabel.textAlignment = .center
-        titleLabel.font = UIFont(name: "Nunito-Regular", size: 25.0)
+        titleLabel.font = UIFont(name: "Retro Gaming", size: 22.0)
         titleLabel.sizeToFit()
         
         // Asignar la UILabel como la vista de título del controlador de navegación
         navigationItem.titleView = titleLabel
         if let navigationController = navigationController {
             let appearance = UINavigationBarAppearance()
-            appearance.backgroundColor = UIColor(red: 0.09, green: 0.09, blue: 0.09, alpha: 1.0)
+            appearance.backgroundColor = UIColor(red: 0.0, green: 0.02, blue: 0.02, alpha: 1.0)
             
             navigationController.navigationBar.standardAppearance = appearance
             navigationController.navigationBar.scrollEdgeAppearance = appearance
@@ -139,9 +139,10 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         // Crear la UITableView
             tableView = UITableView(frame: view.bounds, style: .plain)
             tableView.alpha = 0.0
-            tableView.backgroundColor = UIColor(red: 0.09, green: 0.09, blue: 0.09, alpha: 1.0)
+        tableView.backgroundColor = UIColor.clear//UIColor(red: 0.09, green: 0.09, blue: 0.09, alpha: 1.0)
             tableView.delegate = self
             tableView.dataSource = self
+            tableView.register(CharacterCell.nib(), forCellReuseIdentifier: CharacterCell.identifier)
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -149,19 +150,27 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: "Cell")
+        let cell = tableView.dequeueReusableCell(withIdentifier: CharacterCell.identifier, for: indexPath) as! CharacterCell
+        cell.isUserInteractionEnabled = true
             
         // Configurar la celda con los datos correspondientes
-        cell.textLabel?.text = "\(characters[indexPath.row].id) - \(characters[indexPath.row].name)"
-        cell.textLabel?.textColor = UIColor.white
-        cell.backgroundColor = UIColor(red: 0.09, green: 0.09, blue: 0.09, alpha: 1.0)
+        cell.configureWithData(name: characters[indexPath.row].name, image: characters[indexPath.row].imageData ?? Data(), state: characters[indexPath.row].status, specie: characters[indexPath.row].species)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
     @objc func reloadCharacters() {
         reloadButton.backgroundColor = UIColor(red: 0.45, green: 0.73, blue: 0.3, alpha: 1.0)
         reloadButton.isHidden = true
         imageView.isHidden = false
+        UIView.animate(withDuration: 1, animations: {
+            self.imageView.alpha = 1.0
+        }) { _ in
+            self.imageView.isHidden = false
+        }
         loadCharacters()
     }
     

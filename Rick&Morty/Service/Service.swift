@@ -11,6 +11,7 @@ enum ServiceError: Error {
     case ServiceErrorResponse
     case ServiceErrorURL
     case ServiceErrorParsing
+    case ServiceErrorImage
 }
 
 class Service {
@@ -34,7 +35,29 @@ class Service {
                     allCharacters.append(contentsOf: characters)
                     
                     if nextPage == "" {
-                        completion(.success(allCharacters))
+                        
+                        let group = DispatchGroup()
+                        for (index,character) in allCharacters.enumerated() {
+                            group.enter()
+                            self.fetchCharacterImage(imageUrl: character.image) { imageResult in
+                                switch imageResult {
+                                    case .success(let imageData):
+                                        var characterWithImage = character
+                                        characterWithImage.imageData = imageData
+                                    allCharacters[index] = characterWithImage
+                                            
+                                    case .failure(let error):
+                                        completion(.failure(error))
+                                }
+                                        
+                                group.leave()
+                            }
+                        }
+                                
+                        group.notify(queue: DispatchQueue.main) {
+                            completion(.success(allCharacters))
+                        }
+                        
                     } else {
                         nextURL = nextPage
                         fetchNextPage() // Llama recursivamente para obtener la siguiente página
@@ -78,6 +101,25 @@ class Service {
         }.resume()
     }
     
+    func fetchCharacterImage(imageUrl: String, completion: @escaping (Result<Data, Error>) -> ()) {
+        guard let url = URL(string: imageUrl) else {
+            completion(.failure(ServiceError.ServiceErrorImage))
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let _ = error {
+                completion(.failure(ServiceError.ServiceErrorImage))
+                return
+            }
+                
+            guard let data = data else {
+                completion(.failure(ServiceError.ServiceErrorImage))
+                return
+            }
+            completion(.success(data))
+        }.resume()
+    }
     
     
     

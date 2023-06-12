@@ -8,6 +8,7 @@
 	<string>UIStatusBarStyleLightContent</string>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Retro Gaming.ttf</string>
 		<string>Nunito-Black.ttf</string>
 		<string>Nunito-BlackItalic.ttf</string>
 		<string>Nunito-Bold.ttf</string>

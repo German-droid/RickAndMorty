@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		933570D32A36AD9A0014E8C9 /* Retro Gaming.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 933570D22A36AD9A0014E8C9 /* Retro Gaming.ttf */; };
 		93DA51B22A34FC8F006277E2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93DA51B12A34FC8F006277E2 /* AppDelegate.swift */; };
 		93DA51B42A34FC8F006277E2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93DA51B32A34FC8F006277E2 /* SceneDelegate.swift */; };
 		93DA51B62A34FC8F006277E2 /* CharacterListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93DA51B52A34FC8F006277E2 /* CharacterListVC.swift */; };
@@ -60,6 +61,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		933570D22A36AD9A0014E8C9 /* Retro Gaming.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Retro Gaming.ttf"; sourceTree = "<group>"; };
 		93DA51AE2A34FC8F006277E2 /* Rick&Morty.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Rick&Morty.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93DA51B12A34FC8F006277E2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		93DA51B32A34FC8F006277E2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 		93DA51E42A350B8A006277E2 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				933570D22A36AD9A0014E8C9 /* Retro Gaming.ttf */,
 				93DA51ED2A350BCF006277E2 /* Nunito-Black.ttf */,
 				93DA51E62A350BCE006277E2 /* Nunito-BlackItalic.ttf */,
 				93DA51F32A350BCF006277E2 /* Nunito-Bold.ttf */,
@@ -368,6 +371,7 @@
 				93DA51BE2A34FC92006277E2 /* Assets.xcassets in Resources */,
 				93DA521A2A36279E006277E2 /* CharacterCell.xib in Resources */,
 				93DA51FE2A350BCF006277E2 /* Nunito-MediumItalic.ttf in Resources */,
+				933570D32A36AD9A0014E8C9 /* Retro Gaming.ttf in Resources */,
 				93DA51FA2A350BCF006277E2 /* Nunito-BoldItalic.ttf in Resources */,
 				93DA51F92A350BCF006277E2 /* Nunito-ExtraLightItalic.ttf in Resources */,
 				93DA52002A350BCF006277E2 /* Nunito-SemiBold.ttf in Resources */,

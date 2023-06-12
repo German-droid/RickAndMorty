@@ -18,6 +18,7 @@ struct Character: Codable {
     let location: Location
     let image: String
     let episode: [String]
+    var imageData: Data?
 }
 
 struct Origin: Codable {
