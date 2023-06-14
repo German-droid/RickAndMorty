@@ -10,6 +10,7 @@ import UIKit
 
 class CharacterCell: UITableViewCell {
     
+    @IBOutlet weak var vistaContenido: UIView!
     @IBOutlet weak var generalView: UIView!
     @IBOutlet weak var characterImage: UIImageView!
     @IBOutlet weak var characterName: UILabel!
@@ -26,11 +27,14 @@ class CharacterCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        self.contentView.backgroundColor = UIColor.clear
+        vistaContenido.backgroundColor = UIColor.clear
         configurationGeneral()
         configurationStyleView()
         configurationStatusView()
         configurationMainStackView()
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor.clear
+        self.selectedBackgroundView = backgroundView
     }
         
     func configureWithData(name: String, image: Data, state: String, specie: String) {

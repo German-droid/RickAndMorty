@@ -58,12 +58,15 @@
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eoh-Fq-vH9">
                                                         <rect key="frame" x="0.0" y="0.0" width="278.66666666666669" height="60"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="8" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I72-zk-ZgQ">
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="8" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I72-zk-ZgQ">
                                                                 <rect key="frame" x="0.0" y="0.0" width="278.66666666666669" height="60"/>
                                                                 <fontDescription key="fontDescription" name="FreePixel-Regular" family="Free Pixel" pointSize="50"/>
-                                                                <color key="textColor" red="0.38357865810000003" green="0.81010329719999996" blue="0.30575042959999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                                <color key="textColor" red="0.37956267599999999" green="0.80623465780000003" blue="0.29005518559999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                 <color key="highlightedColor" red="0.37956267599999999" green="0.80623465780000003" blue="0.29005518559999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                 <size key="shadowOffset" width="0.0" height="0.0"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="Alignment" value="&quot;&quot;"/>
+                                                                </userDefinedRuntimeAttributes>
                                                             </label>
                                                         </subviews>
                                                         <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -149,6 +152,7 @@
                 <outlet property="generalView" destination="h41-6e-NuJ" id="64x-c6-W49"/>
                 <outlet property="mainStackView" destination="K2l-cI-y4S" id="Jtb-UT-KMj"/>
                 <outlet property="stateView" destination="qSE-Kp-YOT" id="OSK-2M-kQ5"/>
+                <outlet property="vistaContenido" destination="sR7-Fm-v0W" id="a5g-Ps-Yh7"/>
             </connections>
             <point key="canvasLocation" x="-47.328244274809158" y="-59.154929577464792"/>
         </tableViewCell>

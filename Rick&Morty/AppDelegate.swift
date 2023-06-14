@@ -15,13 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-        if let customFont = UIFont(name: "Nunito-Regular", size: 17) {
-            UILabel.appearance().font = customFont
-            UITextField.appearance().font = customFont
-            UITextView.appearance().font = customFont
-                // Configurar la fuente para otros tipos de vistas según sea necesario
-        }
-
         return true
     }
 
