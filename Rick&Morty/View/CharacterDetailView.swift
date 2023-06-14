@@ -11,7 +11,7 @@ class CharacterDetailView: UIView {
 
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet var contentView: UIView!
-    @IBOutlet weak var genealView: UIView!
+    @IBOutlet weak var generalView: UIView!
     @IBOutlet weak var cardView: UIView!
     @IBOutlet weak var portalBackgroundImage: UIImageView!
     @IBOutlet weak var characterName: UILabel!
@@ -40,8 +40,6 @@ class CharacterDetailView: UIView {
            
         contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         // Agrega una función que se llamará después de que la vista se haya cargado completamente
-        stackView.layer.borderWidth = 1
-        stackView.layer.borderColor = UIColor.red.cgColor
         
         DispatchQueue.main.async {
             self.updateImageViewSize()
@@ -66,6 +64,37 @@ class CharacterDetailView: UIView {
         
             self.characterImage = imageView
         addSubview(characterImage)
+        
+        let maskLayer = CAShapeLayer()
+                
+        
+        // Crear un UIBezierPath con esquinas redondeadas
+        let path = UIBezierPath()
+        path.move(to: CGPoint(x: 0, y: 25)) // Punto inicial
+        path.addLine(to: CGPoint(x: 25, y: 0)) // Diagonal derecha arriba 25
+        path.addLine(to: CGPoint(x: generalView.bounds.width-25, y: 0)) // Derecha hasta -25 del width total
+        path.addLine(to: CGPoint(x: generalView.bounds.width, y: 25)) // Diagonal derecha abajo 25
+        path.addLine(to: CGPoint(x: generalView.bounds.width, y: generalView.bounds.height-25)) // Hasta abajo -25
+        path.addLine(to: CGPoint(x: generalView.bounds.width-25, y: generalView.bounds.height)) // Diagonal izquierda abajo 25
+        path.addLine(to: CGPoint(x: 25, y: generalView.bounds.height)) // Hasta la izquierda -25
+        path.addLine(to: CGPoint(x: 0, y: generalView.bounds.height-25)) // Diagonal izquierda arriba -25
+        path.addLine(to: CGPoint(x: 0, y: 25)) // Punto inicial
+        
+        // Crear una capa de máscara
+        maskLayer.path = path.cgPath
+        generalView.layer.mask = maskLayer
+
+        // Crear una capa de borde
+        let borderLayer = CAShapeLayer()
+        borderLayer.path = path.cgPath
+        borderLayer.lineWidth = 1.5
+        borderLayer.strokeColor = UIColor(red: 0.38, green: 0.81, blue: 0.31, alpha: 1.0).cgColor
+        borderLayer.fillColor = UIColor.clear.cgColor
+
+        // Agregar la capa de borde a la vista
+        generalView.layer.addSublayer(borderLayer)
+        
+        
     }
     
     func setParameters(name: String, gender: String, species: String, status: String, type: String, origin: String, location: String, debut: String, imagen: Data) {

@@ -4,7 +4,6 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -28,7 +27,7 @@
                 <outlet property="characterStatus" destination="SiC-Ua-WgP" id="ODY-7T-0Hm"/>
                 <outlet property="characterType" destination="Gv9-oh-OCp" id="DYZ-Bq-4Td"/>
                 <outlet property="contentView" destination="kJ5-1v-b55" id="7tZ-UN-F6S"/>
-                <outlet property="genealView" destination="uTe-Zj-qJ5" id="zdt-e6-INW"/>
+                <outlet property="generalView" destination="uTe-Zj-qJ5" id="BS1-ka-4Iu"/>
                 <outlet property="portalBackgroundImage" destination="yha-VR-f17" id="gPA-qf-atz"/>
                 <outlet property="stackView" destination="52c-kP-UQ7" id="oHh-DY-JNv"/>
             </connections>
@@ -58,7 +57,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" systemColor="systemYellowColor"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="Hhl-Id-Gdq" secondAttribute="bottom" id="12O-G3-l97"/>
                                                 <constraint firstItem="Hhl-Id-Gdq" firstAttribute="top" secondItem="M8q-5q-LxI" secondAttribute="top" id="Ln9-VP-ftm"/>
@@ -76,7 +75,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" systemColor="tintColor"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstItem="vgb-jX-YS8" firstAttribute="top" secondItem="LO1-DZ-1Ux" secondAttribute="top" id="PsV-H7-UcT"/>
                                                 <constraint firstAttribute="bottom" secondItem="vgb-jX-YS8" secondAttribute="bottom" id="R62-b1-4h4"/>
@@ -282,7 +281,7 @@
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </stackView>
                                             </subviews>
-                                            <color key="backgroundColor" systemColor="systemPurpleColor"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="qh8-MV-l3F" secondAttribute="bottom" id="KHK-eC-f2I"/>
                                                 <constraint firstItem="qh8-MV-l3F" firstAttribute="leading" secondItem="MHJ-p7-hdZ" secondAttribute="leading" id="bXY-LH-rre"/>
@@ -301,7 +300,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="ocF-gG-wol" secondAttribute="trailing" id="9Pj-2f-kQ3"/>
                                                 <constraint firstItem="ocF-gG-wol" firstAttribute="leading" secondItem="veY-th-XZ3" secondAttribute="leading" id="gfd-0E-uMP"/>
@@ -469,7 +468,7 @@
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </stackView>
                                             </subviews>
-                                            <color key="backgroundColor" systemColor="systemGray4Color"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="ZR4-Y4-u9x" secondAttribute="bottom" id="1Xq-mm-uVG"/>
                                                 <constraint firstItem="ZR4-Y4-u9x" firstAttribute="top" secondItem="fgn-eC-Qs8" secondAttribute="top" id="40u-yK-zBI"/>
@@ -487,7 +486,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" systemColor="systemBrownColor"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstItem="uwr-oo-lAJ" firstAttribute="top" secondItem="z1k-wt-Fca" secondAttribute="top" id="5gM-86-CrB"/>
                                                 <constraint firstAttribute="trailing" secondItem="uwr-oo-lAJ" secondAttribute="trailing" id="HPa-19-tsw"/>
@@ -506,7 +505,7 @@
                                                     <color key="shadowColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" systemColor="labelColor"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstItem="JHw-dl-BBg" firstAttribute="top" secondItem="WeE-N6-Zab" secondAttribute="top" id="RuB-Ig-08O"/>
                                                 <constraint firstAttribute="trailing" secondItem="JHw-dl-BBg" secondAttribute="trailing" id="Wfe-5G-XuU"/>
@@ -527,7 +526,7 @@
                             </constraints>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" red="0.13582286565897592" green="0.27379523383246529" blue="0.15213312497467718" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                    <color key="backgroundColor" red="0.10117413877046134" green="0.20394943699692236" blue="0.11332361324504822" alpha="0.49584061578409561" colorSpace="custom" customColorSpace="displayP3"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="f2w-PH-KUJ" secondAttribute="trailing" id="JVf-wK-YMv"/>
                         <constraint firstAttribute="bottom" secondItem="f2w-PH-KUJ" secondAttribute="bottom" id="SBn-Nd-c0r"/>
@@ -557,26 +556,5 @@
     </objects>
     <resources>
         <image name="portalBackground" width="1216" height="1273"/>
-        <systemColor name="labelColor">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBrownColor">
-            <color red="0.63529411764705879" green="0.51764705882352946" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemGray4Color">
-            <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemOrangeColor">
-            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemPurpleColor">
-            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemYellowColor">
-            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="tintColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
     </resources>
 </document>

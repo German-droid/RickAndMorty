@@ -73,7 +73,6 @@
                                                         <constraints>
                                                             <constraint firstAttribute="bottom" secondItem="I72-zk-ZgQ" secondAttribute="bottom" id="H1n-eL-kPV"/>
                                                             <constraint firstItem="I72-zk-ZgQ" firstAttribute="leading" secondItem="eoh-Fq-vH9" secondAttribute="leading" id="OOu-cu-G0x"/>
-                                                            <constraint firstAttribute="height" constant="60" id="mMl-Rd-1q2"/>
                                                             <constraint firstItem="I72-zk-ZgQ" firstAttribute="top" secondItem="eoh-Fq-vH9" secondAttribute="top" id="my3-SC-uyK"/>
                                                             <constraint firstAttribute="trailing" secondItem="I72-zk-ZgQ" secondAttribute="trailing" id="vsQ-Gx-kLT"/>
                                                         </constraints>

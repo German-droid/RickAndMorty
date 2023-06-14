@@ -7,9 +7,10 @@
 
 import UIKit
 
-class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate {
     
     var tableView: UITableView!
+    let searchController = UISearchController()
     let imageView: UIImageView = {
         var imageView = UIImageView()
         imageView.image = Utils.shared.loadAnimatedGIF(named: "loadingGif", duration: 5)
@@ -18,9 +19,7 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         
         return imageView
     }()
-    
     var characterDetailView: CharacterDetailView!
-    
     let invisibleButton: UIButton = {
         var btn = UIButton(type: .custom)
         btn.isHidden = true
@@ -46,16 +45,18 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         view.layer.zPosition = 0
         return view
     }()
-    var characters: [Character] = []
+    var characters = [Character]()
+    var filteredCharacters = [Character]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 0.09, green: 0.09, blue: 0.09, alpha: 1)
-        configureTable()
-        configureNavigationBar()
+        setupTable()
+        setupNavigationBar()
         loadCharacters()
         visualEffectView.frame = view.bounds
         setupCharacterDetailView()
+        setupSearchController()
     }
     
     override func viewDidLayoutSubviews() {
@@ -99,20 +100,17 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         
         let overlayView = UIView(frame: view.bounds)
         overlayView.backgroundColor = UIColor.black.withAlphaComponent(0.90)
+        
         view.addSubview(overlayView)
-        
-        //visualEffectView.isUserInteractionEnabled = true
         view.addSubview(visualEffectView)
-        
-        print("ey")
-        
-        // Agregarlas a la vista principal
         view.addSubview(tableView)
         view.addSubview(imageView)
         view.addSubview(reloadButton)
         view.addSubview(invisibleButton)
         view.addSubview(characterDetailView)
     }
+    
+    // MARK: - Views' configurations
     
     private func loadCharacters() {
 
@@ -149,8 +147,8 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         
     }
     
-    private func configureNavigationBar() {
-        // Crear una UILabel con el título
+    private func setupNavigationBar() {
+        
         let titleLabel = UILabel()
         titleLabel.text = "Rick & Morty"
         titleLabel.textColor = UIColor(red: 0.38, green: 0.81, blue: 0.29, alpha: 1.0)
@@ -158,18 +156,18 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         titleLabel.font = UIFont(name: "Retro Gaming", size: 22.0)
         titleLabel.sizeToFit()
         
-        // Asignar la UILabel como la vista de título del controlador de navegación
         navigationItem.titleView = titleLabel
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(manageSearchBar))
+        navigationItem.rightBarButtonItem?.tintColor = UIColor.green
         if let navigationController = navigationController {
             let appearance = UINavigationBarAppearance()
             appearance.backgroundColor = UIColor(red: 0.0, green: 0.02, blue: 0.02, alpha: 1.0)
-            
             navigationController.navigationBar.standardAppearance = appearance
             navigationController.navigationBar.scrollEdgeAppearance = appearance
         }
     }
     
-    private func configureTable() {
+    private func setupTable() {
         // Crear la UITableView
             tableView = UITableView(frame: view.bounds, style: .plain)
             tableView.alpha = 0.0
@@ -185,16 +183,37 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             characterDetailView.layer.zPosition = 0
         }
     
+    func setupSearchController() {
+        searchController.loadViewIfNeeded()
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.enablesReturnKeyAutomatically = false
+        searchController.searchBar.returnKeyType = UIReturnKeyType.done
+        searchController.hidesNavigationBarDuringPresentation = true
+        definesPresentationContext = true
+        navigationItem.searchController?.searchBar.setValue("Cancel", forKey: "cancelButtonText")
+        searchController.searchBar.barTintColor = UIColor(red: 0.03, green: 0.1, blue: 0.03, alpha: 0.5)
+        searchController.searchBar.tintColor = UIColor(red: 0.38, green: 0.81, blue: 0.29, alpha: 1.0)
+        searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "Type a character's name", attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 0.18, green: 0.51, blue: 0.19, alpha: 1.0)])
+        UISearchTextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(red: 0.18, green: 0.51, blue: 0.19, alpha: 1.0)]
+
+
+        navigationItem.hidesSearchBarWhenScrolling = false
+        searchController.searchBar.delegate = self
+        
+    }
+    
+    // MARK: - Tableview methods
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return characters.count
+        return searchController.isActive ? filteredCharacters.count : characters.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CharacterCell.identifier, for: indexPath) as! CharacterCell
-        cell.layer.zPosition = 0
-            
-        // Configurar la celda con los datos correspondientes
-        cell.configureWithData(name: characters[indexPath.row].name, image: characters[indexPath.row].imageData ?? Data(), state: characters[indexPath.row].status, specie: characters[indexPath.row].species)
+        let character = searchController.isActive ? filteredCharacters[indexPath.row] : characters[indexPath.row]
+        cell.configureWithData(name: character.name, image: character.imageData ?? Data(), state: character.status, specie: character.species)
+        
         return cell
     }
     
@@ -206,17 +225,17 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         
         cell.generalView.backgroundColor = UIColor(red: 0.62, green: 1.0, blue: 0.54, alpha: 1.0)
         
-        let name = characters[indexPath.row].name
-        let gender = characters[indexPath.row].gender
-        let species = characters[indexPath.row].species
-        let status = characters[indexPath.row].status
-        let type = characters[indexPath.row].type
-        let origin = characters[indexPath.row].origin.name
-        let location = characters[indexPath.row].location.name
-        let debut = characters[indexPath.row].episode[0]
-        let imageData = characters[indexPath.row].imageData ?? Data()
+        let character = searchController.isActive ? filteredCharacters[indexPath.row] : characters[indexPath.row]
         
-        self.characterDetailView.setParameters(name: name, gender: gender, species: species, status: status, type: type, origin: origin, location: location, debut: debut, imagen: imageData)
+        self.characterDetailView.setParameters(name: character.name,
+                                               gender: character.gender,
+                                               species: character.species,
+                                               status: character.status,
+                                               type: character.type,
+                                               origin: character.origin.name,
+                                               location: character.location.name,
+                                               debut: character.episode[0],
+                                               imagen: character.imageData ?? Data())
         
         UIView.animate(withDuration: 1, animations: {
             self.visualEffectView.layer.zPosition = 2
@@ -232,6 +251,36 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         }
         
     }
+    
+    // MARK: - SearchBar methods
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchBar = searchController.searchBar
+        let searchText = searchBar.text!
+        filterForSearchText(searchText: searchText)
+    }
+    
+    func filterForSearchText(searchText: String) {
+        filteredCharacters.removeAll()
+
+        var searchTextMatch: Bool
+        for character in characters {
+            
+            if searchController.searchBar.text != "" {
+                searchTextMatch = character.name.lowercased().contains(searchText.lowercased())
+            } else {
+                searchTextMatch = true
+            }
+            
+            if searchTextMatch {
+                filteredCharacters.append(character)
+            }
+
+        }
+        tableView.reloadData()
+    }
+
+    // MARK: - Selectors
     
     @objc func handleTap() {
         UIView.animate(withDuration: 1, animations: {
@@ -260,6 +309,14 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     @objc func highlightButton() {
         reloadButton.backgroundColor = UIColor(red: 0.45, green: 0.73, blue: 0.3, alpha: 0.7)
+    }
+    
+    @objc func manageSearchBar() {
+        if navigationItem.searchController == nil {
+            navigationItem.searchController = searchController
+        } else {
+            navigationItem.searchController = nil
+        }
     }
 }
 
