@@ -79,7 +79,6 @@ class CharacterCell: UITableViewCell {
         path.addLine(to: CGPoint(x: 0, y: generalView.bounds.height)) // Punto inferior izquierdo
         path.addLine(to: CGPoint(x: 0, y: 0)) // Punto inicial
         
-        // Crear una capa de máscara
         // Aplicar la máscara a la vista
         let maskLayer = CAShapeLayer()
         maskLayer.path = path.cgPath

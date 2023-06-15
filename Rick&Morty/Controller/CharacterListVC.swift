@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate {
     
@@ -31,7 +32,7 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         var btn = UIButton(type: .custom)
         btn.isHidden = true
         btn.alpha = 0.0
-        btn.layer.zPosition = 1
+        btn.layer.zPosition = 2
         btn.setTitle("Reintentar", for: .normal)
         btn.setTitleColor(UIColor(red: 0.09, green: 0.09, blue: 0.09, alpha: 1.0), for: .normal)
         btn.backgroundColor = UIColor(red: 0.45, green: 0.73, blue: 0.3, alpha: 1.0)
@@ -45,16 +46,16 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         view.layer.zPosition = 0
         return view
     }()
-    var characters = [Character]()
-    var filteredCharacters = [Character]()
+    var characters: [CoreCharacter] = []
+    var filteredCharacters: [CoreCharacter] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 0.09, green: 0.09, blue: 0.09, alpha: 1)
+        visualEffectView.frame = view.bounds
         setupTable()
         setupNavigationBar()
-        loadCharacters()
-        visualEffectView.frame = view.bounds
+        checkForData()
         setupCharacterDetailView()
         setupSearchController()
     }
@@ -75,32 +76,36 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         // Configurar la UITableView
         tableView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
-        // Configurar el UIButon
-        reloadButton.addTarget(self, action: #selector(highlightButton), for: .touchDown)
+        // Configurar el UIButon de reload
+        reloadButton.addTarget(self, action: #selector(reloadCharacters), for: .touchDown)
         let buttonWidth: CGFloat = 200
         let buttonHeight: CGFloat = 50
         let buttonX = (view.bounds.width - buttonWidth) / 2
         let buttonY = (view.bounds.height - buttonHeight) / 2
         reloadButton.frame = CGRect(x: buttonX, y: buttonY, width: buttonWidth, height: buttonHeight)
         
+        // Configurar el CharacterDetailView
         let characterWidth: CGFloat = view.bounds.width * 0.75
         let characterHeight: CGFloat = view.bounds.height * 0.8
         let characterX = (view.bounds.width - characterWidth) / 2
         let characterY = (view.bounds.height - characterHeight) / 2
         characterDetailView.frame = CGRect(x: characterX, y: characterY + (navigationController?.navigationBar.frame.height ?? 40), width: characterWidth, height: characterHeight)
         
-        
+        // Configurar el UIButon invisible
         invisibleButton.addTarget(self, action: #selector(handleTap), for: .touchDown)
         invisibleButton.frame = view.bounds
         
+        // Configurar la imagen de background
         let backgroundImage = UIImageView(image: UIImage(named: "background"))
         backgroundImage.contentMode = .scaleAspectFill
         backgroundImage.frame = view.bounds
         view.addSubview(backgroundImage)
         
+        // Crear una capa casi opaca con la que oscurecer el fondo
         let overlayView = UIView(frame: view.bounds)
         overlayView.backgroundColor = UIColor.black.withAlphaComponent(0.90)
         
+        // Añadir todas las views
         view.addSubview(overlayView)
         view.addSubview(visualEffectView)
         view.addSubview(tableView)
@@ -112,24 +117,86 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     // MARK: - Views' configurations
     
-    private func loadCharacters() {
-
-        Service.shared.fetchAllFromApiToCoredata { result in
-            switch result {
-            case .success(let characters):
-                // Manejar los personajes obtenidos correctamente
-                self.characters = characters
-                DispatchQueue.main.async { [self] in
-                    self.tableView.reloadData()
-                    UIView.animate(withDuration: 1, animations: {
-                        self.imageView.alpha = 0.0
-                        self.tableView.alpha = 1.0
-                    }) { _ in
-                        self.imageView.isHidden = true
+    private func checkForData() {
+        
+        if Service.shared.checkIfItemExist() {
+            Service.shared.retrieveFromCoreData { result in
+                switch result {
+                case .success(let allSavedCharacters):
+                    self.characters = allSavedCharacters
+                    
+                    DispatchQueue.main.async { [self] in
+                        self.tableView.reloadData()
+                        UIView.animate(withDuration: 1, animations: {
+                            self.imageView.alpha = 0.0
+                            self.tableView.alpha = 1.0
+                        }) { _ in
+                            self.imageView.isHidden = true
+                            self.searchController.searchBar.isHidden = false
+                            self.navigationItem.rightBarButtonItem?.isHidden = false
+                        }
+                    }
+                    
+                case .failure(_):
+                    DispatchQueue.main.async { [self] in
+                        UIView.animate(withDuration: 1, animations: {
+                            self.imageView.alpha = 0.0
+                            self.reloadButton.alpha = 1.0
+                        }) { _ in
+                            self.imageView.isHidden = true
+                            self.reloadButton.isHidden = false
+                            
+                        }
                     }
                 }
-                print("All characters: \(characters.count)")
-            case .failure(let error):
+            }
+        } else {
+            loadCharacters()
+        }
+        
+    }
+    
+    private func loadCharacters() {
+
+        Service.shared.fetchAllFromApiToCoreData { result in
+            switch result {
+            case .success:
+                // Successfully saved to CoreData
+                
+                Service.shared.retrieveFromCoreData { result in
+                    
+                    switch result {
+                    case .success(let allSavedCharacters):
+                        
+                        self.characters = allSavedCharacters
+                        DispatchQueue.main.async { [self] in
+                            self.tableView.reloadData()
+                            UIView.animate(withDuration: 1, animations: {
+                                self.imageView.alpha = 0.0
+                                self.tableView.alpha = 1.0
+                            }) { _ in
+                                self.imageView.isHidden = true
+                                self.searchController.searchBar.isHidden = false
+                                self.navigationItem.rightBarButtonItem?.isHidden = false
+                            }
+                        }
+                    case .failure(_):
+                        DispatchQueue.main.async { [self] in
+                            UIView.animate(withDuration: 1, animations: {
+                                self.imageView.alpha = 0.0
+                                self.reloadButton.alpha = 1.0
+                            }) { _ in
+                                self.imageView.isHidden = true
+                                self.reloadButton.isHidden = false
+                                
+                            }
+                        }
+                    }
+                    
+                }
+                
+            case .failure(_):
+                Service.shared.deleteFromPersistent()
                 DispatchQueue.main.async { [self] in
                     UIView.animate(withDuration: 1, animations: {
                         self.imageView.alpha = 0.0
@@ -140,8 +207,6 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                         
                     }
                 }
-                // Manejar el error en la obtención de los personajes
-                print("Error: \(error)")
             }
         }
         
@@ -158,6 +223,7 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         
         navigationItem.titleView = titleLabel
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(manageSearchBar))
+        navigationItem.rightBarButtonItem?.isHidden = true
         navigationItem.rightBarButtonItem?.tintColor = UIColor.green
         if let navigationController = navigationController {
             let appearance = UINavigationBarAppearance()
@@ -169,19 +235,19 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     private func setupTable() {
         // Crear la UITableView
-            tableView = UITableView(frame: view.bounds, style: .plain)
-            tableView.alpha = 0.0
-        tableView.backgroundColor = UIColor.clear//UIColor(red: 0.09, green: 0.09, blue: 0.09, alpha: 1.0)
-            tableView.delegate = self
-            tableView.dataSource = self
-            tableView.register(CharacterCell.nib(), forCellReuseIdentifier: CharacterCell.identifier)
+        tableView = UITableView(frame: view.bounds, style: .plain)
+        tableView.alpha = 0.0
+        tableView.backgroundColor = UIColor.clear
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(CharacterCell.nib(), forCellReuseIdentifier: CharacterCell.identifier)
     }
 
     private func setupCharacterDetailView() {
-            characterDetailView = CharacterDetailView(frame: CGRect(x: 0, y: 0, width: 400, height: 850))
-            characterDetailView.alpha = 0
-            characterDetailView.layer.zPosition = 0
-        }
+        characterDetailView = CharacterDetailView(frame: CGRect(x: 0, y: 0, width: 400, height: 850))
+        characterDetailView.alpha = 0
+        characterDetailView.layer.zPosition = 0
+    }
     
     func setupSearchController() {
         searchController.loadViewIfNeeded()
@@ -197,8 +263,8 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "Type a character's name", attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 0.18, green: 0.51, blue: 0.19, alpha: 1.0)])
         UISearchTextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(red: 0.18, green: 0.51, blue: 0.19, alpha: 1.0)]
 
-
         navigationItem.hidesSearchBarWhenScrolling = false
+        searchController.searchBar.isHidden = true
         searchController.searchBar.delegate = self
         
     }
@@ -212,7 +278,11 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CharacterCell.identifier, for: indexPath) as! CharacterCell
         let character = searchController.isActive ? filteredCharacters[indexPath.row] : characters[indexPath.row]
-        cell.configureWithData(name: character.name, image: character.imageData ?? Data(), state: character.status, specie: character.species)
+        
+        guard let name = character.name, let status = character.status, let species = character.species, let imageData = character.image else {
+            return UITableViewCell()
+        }
+        cell.configureWithData(name: name, image: imageData, state: status, specie: species)
         
         return cell
     }
@@ -222,20 +292,22 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         guard let cell = tableView.cellForRow(at: indexPath) as? CharacterCell else {
             return
         }
-        
         cell.generalView.backgroundColor = UIColor(red: 0.62, green: 1.0, blue: 0.54, alpha: 1.0)
         
         let character = searchController.isActive ? filteredCharacters[indexPath.row] : characters[indexPath.row]
         
-        self.characterDetailView.setParameters(name: character.name,
-                                               gender: character.gender,
-                                               species: character.species,
-                                               status: character.status,
-                                               type: character.type,
-                                               origin: character.origin.name,
-                                               location: character.location.name,
-                                               debut: character.episode[0],
-                                               imagen: character.imageData ?? Data())
+        guard let name = character.name, let gender = character.gender, let species = character.species, let status = character.status, let type = character.type, let origin = character.origin, let location = character.location, let debut = character.debut, let imageData = character.image else {
+            return
+        }
+        self.characterDetailView.setParameters(name: name,
+                                               gender: gender,
+                                               species: species,
+                                               status: status,
+                                               type: type,
+                                               origin: origin,
+                                               location: location,
+                                               debut: debut,
+                                               imagen: imageData)
         
         UIView.animate(withDuration: 1, animations: {
             self.visualEffectView.layer.zPosition = 2
@@ -247,7 +319,6 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             self.characterDetailView.alpha = 1
             self.characterDetailView.layer.zPosition = 4
         }) { _ in
-            
         }
         
     }
@@ -265,17 +336,17 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
 
         var searchTextMatch: Bool
         for character in characters {
-            
             if searchController.searchBar.text != "" {
-                searchTextMatch = character.name.lowercased().contains(searchText.lowercased())
+                guard let name = character.name else {
+                    return
+                }
+                searchTextMatch = name.lowercased().contains(searchText.lowercased())
             } else {
                 searchTextMatch = true
             }
-            
             if searchTextMatch {
                 filteredCharacters.append(character)
             }
-
         }
         tableView.reloadData()
     }
@@ -305,10 +376,6 @@ class CharacterListVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             self.imageView.isHidden = false
         }
         loadCharacters()
-    }
-    
-    @objc func highlightButton() {
-        reloadButton.backgroundColor = UIColor(red: 0.45, green: 0.73, blue: 0.3, alpha: 0.7)
     }
     
     @objc func manageSearchBar() {

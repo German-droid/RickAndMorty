@@ -6,20 +6,27 @@
 //
 
 import Foundation
+import CoreData
+import UIKit
 
 enum ServiceError: Error {
     case ServiceErrorResponse
     case ServiceErrorURL
     case ServiceErrorParsing
     case ServiceErrorImage
+    case ServiceErrorSaveToCoreData
+    case ServiceErrorRetrieveFromCoreData
 }
 
 class Service {
     
     static let shared = Service()
+    let managedContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     let BASE_URL = "https://rickandmortyapi.com/api/character"
 
-    func fetchAllFromApiToCoredata(completion: @escaping (Result<[Character], Error>) -> Void) {
+    //MARK: - Api methods
+    
+    func fetchAllFromApiToCoreData(completion: @escaping (Result<Void, Error>) -> Void) {
         var allCharacters: [Character] = []
         var nextURL: String? = BASE_URL
         
@@ -55,7 +62,19 @@ class Service {
                         }
                                 
                         group.notify(queue: DispatchQueue.main) {
-                            completion(.success(allCharacters))
+                            // Once all characters are retrieved
+                            
+                            self.saveToCoreData(characters: allCharacters) { result in
+                                
+                                switch result {
+                                    case .success:
+                                        completion(.success(()))
+                                    case .failure(let error):
+                                    completion(.failure(error))
+                                }
+                                
+                            }
+                            
                         }
                         
                     } else {
@@ -121,7 +140,75 @@ class Service {
         }.resume()
     }
     
+    //MARK: - Core Data methods
     
+    private func saveToCoreData(characters: [Character], completion: @escaping (Result<Void, Error>) -> ()) {
+        
+        for character in characters {
+            let savedCharacter = CoreCharacter(context: managedContext)
+            
+            savedCharacter.setValue(character.id, forKey: "id")
+            savedCharacter.setValue(character.name, forKey: "name")
+            savedCharacter.setValue(character.status, forKey: "status")
+            savedCharacter.setValue(character.species, forKey: "species")
+            savedCharacter.setValue(character.type, forKey: "type")
+            savedCharacter.setValue(character.gender, forKey: "gender")
+            savedCharacter.setValue(character.origin.name, forKey: "origin")
+            savedCharacter.setValue(character.location.name, forKey: "location")
+            savedCharacter.setValue(character.imageData ?? Data(), forKey: "image")
+            savedCharacter.setValue(character.episode[0], forKey: "debut")
+            
+            do {
+                try self.managedContext.save()
+            } catch let error as NSError {
+                print("Could not save \(character.name). \(error)")
+                completion(.failure(ServiceError.ServiceErrorSaveToCoreData))
+            }
+            
+        }
+        completion(.success(()))
+    }
     
+    func retrieveFromCoreData(completion: @escaping (Result<[CoreCharacter], Error>) -> ()) {
+
+        do {
+            let allSavedCharacters = try managedContext.fetch(CoreCharacter.fetchRequest())
+            
+            completion(.success(allSavedCharacters))
+        } catch let error {
+            print("No se pudieron obtener los datos de Core Data. \(error.localizedDescription)")
+            completion(.failure(ServiceError.ServiceErrorRetrieveFromCoreData))
+        }
+        
+    }
     
+    func checkIfItemExist() -> Bool {
+        
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "CoreCharacter")
+
+        do {
+            let count = try managedContext.count(for: fetchRequest)
+            if count > 0 {
+                return true
+            }else {
+                return false
+            }
+        }catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+            return false
+        }
+    }
+    
+    func deleteFromPersistent() {
+        do {
+            let allSaved = try managedContext.fetch(CoreCharacter.fetchRequest())
+            
+            for character in allSaved {
+                self.managedContext.delete(character)
+            }
+            try managedContext.save()
+        } catch let error {
+            print("No se puedieron borrar los datos de CoreData. \(error.localizedDescription)")
+        }
+    }
 }

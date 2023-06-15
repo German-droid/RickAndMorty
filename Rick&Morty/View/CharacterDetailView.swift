@@ -67,8 +67,6 @@ class CharacterDetailView: UIView {
         
         let maskLayer = CAShapeLayer()
                 
-        
-        // Crear un UIBezierPath con esquinas redondeadas
         let path = UIBezierPath()
         path.move(to: CGPoint(x: 0, y: 25)) // Punto inicial
         path.addLine(to: CGPoint(x: 25, y: 0)) // Diagonal derecha arriba 25

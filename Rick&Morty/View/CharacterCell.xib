@@ -53,13 +53,13 @@
                                         <rect key="frame" x="97.333333333333343" y="0.0" width="318.66666666666663" height="100"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="xjw-5u-fW4">
-                                                <rect key="frame" x="10" y="0.0" width="278.66666666666669" height="100"/>
+                                                <rect key="frame" x="10" y="0.0" width="258.66666666666669" height="100"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eoh-Fq-vH9">
-                                                        <rect key="frame" x="0.0" y="0.0" width="278.66666666666669" height="60"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="258.66666666666669" height="60"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="8" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I72-zk-ZgQ">
-                                                                <rect key="frame" x="0.0" y="0.0" width="278.66666666666669" height="60"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="258.66666666666669" height="60"/>
                                                                 <fontDescription key="fontDescription" name="FreePixel-Regular" family="Free Pixel" pointSize="50"/>
                                                                 <color key="textColor" red="0.37956267599999999" green="0.80623465780000003" blue="0.29005518559999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                 <color key="highlightedColor" red="0.37956267599999999" green="0.80623465780000003" blue="0.29005518559999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -78,10 +78,10 @@
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dN2-4d-C4F">
-                                                        <rect key="frame" x="0.0" y="60" width="278.66666666666669" height="40"/>
+                                                        <rect key="frame" x="0.0" y="60" width="258.66666666666669" height="40"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Human - Alive" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="GfO-V5-VES">
-                                                                <rect key="frame" x="0.0" y="0.0" width="278.66666666666669" height="40"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="258.66666666666669" height="40"/>
                                                                 <fontDescription key="fontDescription" name="RetroGaming" family="Retro Gaming" pointSize="17"/>
                                                                 <color key="textColor" red="0.37956267599999999" green="0.80623465780000003" blue="0.29005518559999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                 <nil key="highlightedColor"/>
@@ -101,7 +101,7 @@
                                             </stackView>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="xjw-5u-fW4" secondAttribute="trailing" constant="30" id="GTT-rK-lT6"/>
+                                            <constraint firstAttribute="trailing" secondItem="xjw-5u-fW4" secondAttribute="trailing" constant="50" id="GTT-rK-lT6"/>
                                             <constraint firstAttribute="bottom" secondItem="xjw-5u-fW4" secondAttribute="bottom" id="LYS-Zh-Mxb"/>
                                             <constraint firstItem="xjw-5u-fW4" firstAttribute="top" secondItem="Lee-Ur-DB4" secondAttribute="top" id="Tyk-FB-uEB"/>
                                             <constraint firstItem="xjw-5u-fW4" firstAttribute="leading" secondItem="Lee-Ur-DB4" secondAttribute="leading" constant="10" id="lfA-9g-aIa"/>
